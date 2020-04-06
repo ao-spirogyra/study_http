@@ -28,10 +28,25 @@ while True:
         client.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nhoge")
     elif requestdata.startswith("GET /huga"):
         client.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nhuga")
+    elif requestdata.startswith("GET /form"):
+        response = b"""
+<form method=\"post\" action=\"/form\">
+<input type=\"text\" name=\"input1\" />
+<input type=\"text\" name=\"input2\" />
+<input type=\"submit\" />
+</form>
+        """
+        client.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"+response)
+    elif requestdata.startswith("POST /form"):
+        formdata = requestdata.split("\r\n\r\n")[1]
+        print("formdata =", formdata)
+        inputdata = formdata.split("=")[1]
+        print("inputdata =", inputdata)
+        client.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\npost")
     else:
         client.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nhello world")
 
-    # クライアントにレスポンスを送信する
+    
     
     # 接続を終了させる(ctrl + C)
     client.close()
