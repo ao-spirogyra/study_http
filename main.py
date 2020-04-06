@@ -40,8 +40,9 @@ while True:
     elif requestdata.startswith("POST /form"):
         formdata = requestdata.split("\r\n\r\n")[1]
         print("formdata =", formdata)
-        inputdata = formdata.split("=")[1]
-        print("inputdata =", inputdata)
+        inputdata1 = formdata.split("&")[0].split("=")[1]
+        inputdata2 = formdata.split("&")[1].split("=")[1]
+        print("inputdata1 =", inputdata1, "inputdata2 =", inputdata2)
         client.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\npost")
     else:
         client.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nhello world")
