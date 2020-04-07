@@ -16,32 +16,65 @@ tcp_server.listen(listen_num)
 
 class NotImplementedPath:
     def get(self, req, res):
-        res.send(b"HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\n\r\nnot implemented")
+        resstr = b"""
+            HTTP/1.1 400 Bad Request
+            Content-Type: text/plain
+
+            not implemented
+        """
+        res.send(resstr)
     def post(self, req, res):
-        res.send(b"HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\n\r\nnot implemented")
+        resstr = b"""
+            HTTP/1.1 400 Bad Request
+            Content-Type: text/plain
+
+            not implemented
+        """
+        res.send(resstr)
 
 class DefaultPath(NotImplementedPath):
     def get(self, req, res):
-        res.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nhello world")
+        resstr = b"""
+            HTTP/1.1 200 OK
+            Content-Type: text/plain
+
+            hello world
+        """
+        res.send(resstr)
 
 class HogePath(NotImplementedPath):
     def get(self, req, res):
-        res.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nhoge")
+        resstr = b"""
+            HTTP/1.1 200 OK
+            Content-Type: text/plain
+
+            hoge
+        """
+        res.send(resstr)
 
 class HugaPath(NotImplementedPath):
     def get(self, req, res):
-        res.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nhuga")
+        resstr = b"""
+            HTTP/1.1 200 OK
+            Content-Type: text/plain
+
+            huga
+        """
+        res.send(resstr)
 
 class FormPath(NotImplementedPath):
     def get(self, req, res):
         resstr = b"""
+            HTTP/1.1 200 OK
+            Content-Type: text/html
+
             <form method=\"post\" action=\"/form\">
             <input type=\"text\" name=\"input1\" />
             <input type=\"text\" name=\"input2\" />
             <input type=\"submit\" />
             </form>
         """
-        res.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"+resstr)
+        res.send(resstr)
     def post(self, req, res):
         formdata = req.split("\r\n\r\n")[1]
         print("formdata =", formdata)
@@ -49,7 +82,12 @@ class FormPath(NotImplementedPath):
         inputdata2 = formdata.split("&")[1].split("=")[1]
         output = "inputdata1 = {}, inputdata2 = {}".format(inputdata1, inputdata2)
         print(output)
-        res.send("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n{}".format(output).encode('utf-8'))
+        resstr = b"""
+            HTTP/1.1 200 OK
+            Content-Type: text/plain
+
+        """+output.encode('utf-8')
+        res.send(resstr)
 
 routes = {
     "/"     : DefaultPath,
