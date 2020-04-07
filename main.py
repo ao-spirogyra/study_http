@@ -15,6 +15,8 @@ tcp_server.bind((server_ip, server_port))
 tcp_server.listen(listen_num)
 
 class NotImplementedPath:
+    def __init__(self):
+        print("init")
     def get(self, req, res):
         resstr = b"""
             HTTP/1.1 400 Bad Request
@@ -89,6 +91,7 @@ class FormPath(NotImplementedPath):
         """+output.encode('utf-8')
         res.send(resstr)
 
+# 文字列とクラスを対応づけ
 routes = {
     "/"     : DefaultPath,
     "/hoge" : HogePath,
@@ -115,9 +118,11 @@ while True:
     clazz = routes.get(path, None)
     if clazz is not None:
         print(clazz.__name__)
+        # 各クラスのインスタンス化
         pathclazz = clazz()
     else:
         pathclazz = NotImplementedPath()
+    # get attribute pathclazzのmethodをfuncに代入
     func = getattr(pathclazz, method.lower())
     func(req, res)
     # 接続を終了させる(ctrl + C)
